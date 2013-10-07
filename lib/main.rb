@@ -2,10 +2,10 @@ require_relative 'login_details'
 require_relative '../common/account'
 
 def usage
-  "Main <account no> <sortcode> <memorable date> <memorable name> <first school> <last school>"
+  "Main <account no> <sortcode> <memorable date> <memorable name> <first school> <last school> <security code>"
 end
 
-if ARGV.length != 6
+if ARGV.length != 7
   puts usage
   exit(-1)
 end
@@ -16,12 +16,13 @@ memorable_date = ARGV[2]
 memorable_name = ARGV[3]
 first_school   = ARGV[4]
 last_school    = ARGV[5]
+security_code  = ARGV[6]
 
 account = Account.new(account_no, sortcode)
-login = LoginDetails.new(first_school, last_school, memorable_name, memorable_date)
+login = LoginDetails.new(first_school, last_school, memorable_name, memorable_date, security_code)
 
-login_step_one = LoginStepOneHandler.new
-login_step_two = LoginStepTwoHandler.new(account)
+login_step_one = LoginStepOneHandler.new(account)
+login_step_two = LoginStepTwoHandler.new(account, login)
 login_step_three = LoginStepThreeHandler.new(account, login)
 recent_items = RecentItemsHandler.new(account)
 previous_statements = PreviousStatementsHandler.new(account)
