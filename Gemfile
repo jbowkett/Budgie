@@ -1,0 +1,5 @@
+source 'http://rubygems.org'
+gem 'capybara', '2.1.0'
+gem 'rspec', '2.14.1'
+gem 'selenium-webdriver', '2.35.1'
+gem 'pry', '0.9.12.2'
