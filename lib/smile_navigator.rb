@@ -23,6 +23,8 @@ class SmileNavigator
     sleep(2)
     login_step_one.handle(session) # enter account details
     sleep(2)
+    login_step_one.move_on(session)
+    sleep(2)
     login_step_two.handle(session) # enter secure passcode
     sleep(2)
     login_step_three.handle(session) # enter secure details
