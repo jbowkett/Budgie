@@ -27,6 +27,8 @@ class SmileNavigator
     sleep(2)
     login_step_two.handle(session) # enter secure passcode
     sleep(2)
+    login_step_two.move_on(session)
+    sleep(2)
     login_step_three.handle(session) # enter secure details
     sleep(2)
     recent_txns = recent_items.handle(session)
