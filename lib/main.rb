@@ -23,7 +23,7 @@ login = LoginDetails.new(first_school, last_school, memorable_name, memorable_da
 
 login_step_one = LoginStepOneHandler.new(account)
 login_step_two = LoginStepTwoHandler.new(login)
-login_step_three = LoginStepThreeHandler.new(account, login)
+login_step_three = LoginStepThreeHandler.new(login)
 recent_items = RecentItemsHandler.new(account)
 previous_statements = PreviousStatementsHandler.new(account)
 
