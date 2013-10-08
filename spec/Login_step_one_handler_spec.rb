@@ -8,6 +8,7 @@ describe '#handle' do
     Capybara.javascript_driver = :webkit
     Capybara.run_server = false
     @session = Capybara::Session.new(:selenium)
+    # todo: get the current directory out of rspec
     @session.visit("file:///Users/jbowkett/other/Smile-Bank-Txn-Downloader/spec/fixtures/login_one.html")
   end
 
