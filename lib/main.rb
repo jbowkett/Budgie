@@ -22,7 +22,7 @@ account = Account.new(account_no, sortcode)
 login = LoginDetails.new(first_school, last_school, memorable_name, memorable_date, security_code)
 
 login_step_one = LoginStepOneHandler.new(account)
-login_step_two = LoginStepTwoHandler.new(account, login)
+login_step_two = LoginStepTwoHandler.new(login)
 login_step_three = LoginStepThreeHandler.new(account, login)
 recent_items = RecentItemsHandler.new(account)
 previous_statements = PreviousStatementsHandler.new(account)
