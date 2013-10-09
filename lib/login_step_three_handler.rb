@@ -9,6 +9,10 @@ class LoginStepThreeHandler
   def handle(page)
     if page.has_css? '#memorablename'
       page.fill_in('memorable name', :with => login_details.memorable_name)
+    elsif page.has_css? '#lastschool'
+      page.fill_in('last school', :with => login_details.last_school)
+    elsif page.has_css? '#firstschool'
+      page.fill_in('first school', :with => login_details.first_school)
     end
   end
 
