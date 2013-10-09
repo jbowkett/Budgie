@@ -46,4 +46,21 @@ describe '#handle' do
       @session.find('#secondPassCodeDigit')['value'].should == security_code[1]
     end
   end
+
+  context 'When asked for first and fourth digit in the security code' do
+    before :each do
+      # todo: get the current directory out of rspec
+      @session.visit("file:///Users/jbowkett/other/Smile-Bank-Txn-Downloader/spec/fixtures/login_two_first_fourth.html")
+    end
+
+    it 'should fill out the first digit' do
+      LoginStepTwoHandler.new(login_details).handle(@session)
+      @session.find('#firstPassCodeDigit')['value'].should == security_code[0]
+    end
+
+    it 'should fill out the fourth digit' do
+      LoginStepTwoHandler.new(login_details).handle(@session)
+      @session.find('#secondPassCodeDigit')['value'].should == security_code[3]
+    end
+  end
 end
