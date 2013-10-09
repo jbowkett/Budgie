@@ -8,20 +8,25 @@ describe '#handle' do
     Capybara.javascript_driver = :webkit
     Capybara.run_server = false
     @session = Capybara::Session.new(:selenium)
-    # todo: get the current directory out of rspec
-    @session.visit("file:///Users/jbowkett/other/Smile-Bank-Txn-Downloader/spec/fixtures/login_two.html")
   end
 
   let(:security_code) { '9812' }
-  let(:login_details) { double(:login_details, :security_code => security_code ) }
+  let(:login_details) { double(:login_details, :security_code => security_code) }
 
-  it 'should fill out the second digit in the security code' do
-    LoginStepTwoHandler.new(login_details).handle(@session)
-    @session.find('#firstPassCodeDigit')['value'].should == security_code[1]
-  end
+  context 'When asked for second and third digit in the security code' do
+    before :each do
+      # todo: get the current directory out of rspec
+      @session.visit("file:///Users/jbowkett/other/Smile-Bank-Txn-Downloader/spec/fixtures/login_two_second_third.html")
+    end
 
-  it 'should fill out the third digit in the security code' do
-    LoginStepTwoHandler.new(login_details).handle(@session)
-    @session.find('#secondPassCodeDigit')['value'].should == security_code[2]
+    it 'should fill out the second digit' do
+      LoginStepTwoHandler.new(login_details).handle(@session)
+      @session.find('#firstPassCodeDigit')['value'].should == security_code[1]
+    end
+
+    it 'should fill out the third digit' do
+      LoginStepTwoHandler.new(login_details).handle(@session)
+      @session.find('#secondPassCodeDigit')['value'].should == security_code[2]
+    end
   end
 end
