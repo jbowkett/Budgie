@@ -24,8 +24,9 @@ login = LoginDetails.new(first_school, last_school, memorable_name, memorable_da
 login_step_one = LoginStepOneHandler.new(account)
 login_step_two = LoginStepTwoHandler.new(login)
 login_step_three = LoginStepThreeHandler.new(login)
+balance = BalanceHandler.new(account)
 recent_items = RecentItemsHandler.new(account)
 previous_statements = PreviousStatementsHandler.new(account)
 
-smile_extractor = SmileNavigator.new(login_step_one, login_step_two, login_step_three, recent_items, previous_statements)
+smile_extractor = SmileNavigator.new(login_step_one, login_step_two, login_step_three, balance, recent_items, previous_statements)
 smile_extractor.extract
