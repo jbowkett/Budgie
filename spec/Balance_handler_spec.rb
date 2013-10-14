@@ -2,7 +2,7 @@ require 'rspec'
 require_relative '../lib/balance_handler'
 require 'capybara'
 
-describe '#handle' do
+describe '#extract_balance' do
 
   before :each do
     Capybara.javascript_driver = :webkit
