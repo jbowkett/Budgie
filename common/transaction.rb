@@ -1,1 +1,1 @@
-Transaction = Struct.new(:date, :narrative, :amount_in_pence, :is_credit?, :account)
+Transaction = Struct.new(:date, :narrative, :amount_in_pence, :account)
