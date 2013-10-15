@@ -27,7 +27,7 @@ class RecentItemsHandler
 
   def extract_transactions(rows)
     rows.map do |entry|
-      amount_in_pence = is_credit?(entry) ? amount_in_pence_from(entry.credit) : amount_in_pence_from(entry.debit) * -1
+      amount_in_pence = is_credit?(entry) ? to_pence(entry.credit) : to_pence(entry.debit) * -1
       amount_in_pence *= -1 if account.is_credit_card?
       Transaction.new(Date.strptime(entry.date, '%d/%m/%Y'),
                       entry.narrative,
@@ -40,7 +40,7 @@ class RecentItemsHandler
     entry.debit.empty?
   end
 
-  def amount_in_pence_from(raw_amount)
+  def to_pence(raw_amount)
     Float(raw_amount.gsub(/£|\+|-/, '')) * 100.00
   end
 end
