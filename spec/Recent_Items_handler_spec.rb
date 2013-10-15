@@ -1,5 +1,6 @@
 require 'rspec'
 require_relative '../lib/recent_items_handler'
+require_relative '../lib/transaction_extractor'
 require 'capybara'
 
 describe '#handle' do
@@ -19,7 +20,7 @@ describe '#handle' do
     let(:sort_code)  { '119185' }
     let(:is_credit_card) { false }
     it 'should extract the balance' do
-      recent_items = RecentItemsHandler.new(account).handle(@session)
+      recent_items = RecentItemsHandler.new(TransactionExtractor.new(account)).handle(@session)
       recent_items.size.should == 9
     end
   end

@@ -1,5 +1,11 @@
 require_relative 'login_details'
 require_relative '../common/account'
+require_relative 'login_step_one_handler'
+require_relative 'login_step_two_handler'
+require_relative 'login_step_three_handler'
+require_relative 'balance_handler'
+require_relative 'recent_items_handler'
+require_relative 'transaction_extractor'
 
 def usage
   "Main <account no> <sortcode> <memorable date> <memorable name> <first school> <last school> <security code>"
@@ -25,7 +31,7 @@ login_step_one = LoginStepOneHandler.new(account)
 login_step_two = LoginStepTwoHandler.new(login)
 login_step_three = LoginStepThreeHandler.new(login)
 balance = BalanceHandler.new(account)
-recent_items = RecentItemsHandler.new(account)
+recent_items = RecentItemsHandler.new(TransactionExtractor.new(account))
 previous_statements = PreviousStatementsHandler.new(account)
 
 smile_extractor = SmileNavigator.new(login_step_one, login_step_two, login_step_three, balance, recent_items, previous_statements)
