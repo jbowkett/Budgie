@@ -1,3 +1,4 @@
+require_relative '../common/transaction'
 
 class TransactionExtractor
 
@@ -28,13 +29,17 @@ class TransactionExtractor
 
   def extract_transactions(rows)
     rows.map do |entry|
-      amount_in_pence = is_credit?(entry) ? to_pence(entry.credit) : to_pence(entry.debit) * -1
-      amount_in_pence *= -1 if account.is_credit_card?
+      amount_in_pence = is_credit?(entry) ? to_pence(entry.credit) : negate(to_pence(entry.debit))
+      negate(amount_in_pence) if account.is_credit_card?
       Transaction.new(Date.strptime(entry.date, '%d/%m/%Y'),
                       entry.narrative,
                       amount_in_pence,
                       account)
     end
+  end
+
+  def negate(amount)
+    amount * -1
   end
 
   def is_credit?(entry)
