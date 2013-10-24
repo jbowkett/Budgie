@@ -20,7 +20,7 @@ describe '#handle' do
     let(:sort_code)  { '119185' }
     let(:is_credit_card) { false }
     it 'should extract the balance' do
-      recent_items = RecentItemsHandler.new(TransactionExtractor.new(account)).handle(@session)
+      recent_items = RecentItemsHandler.new(TransactionExtractor.new(account, 956.01)).handle(@session)
       recent_items.size.should == 9
     end
   end

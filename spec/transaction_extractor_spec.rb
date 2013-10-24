@@ -17,7 +17,7 @@ describe TransactionExtractor do
         ] }
 
         it 'should extract the transaction' do
-          items = TransactionExtractor.new(account).extract_from(table)
+          items = TransactionExtractor.new(account, 0).extract_from(table)
           items.size.should == 1
           items[0].amount_in_pence.should == -1074
         end
@@ -29,7 +29,7 @@ describe TransactionExtractor do
         ] }
 
         it 'should extract the transaction' do
-          items = TransactionExtractor.new(account).extract_from(table)
+          items = TransactionExtractor.new(account, 0).extract_from(table)
           items.size.should == 1
           items[0].amount_in_pence.should == 1074
         end
@@ -46,7 +46,7 @@ describe TransactionExtractor do
         ] }
 
         it 'should make a positive amount in the input a negative amount' do
-          items = TransactionExtractor.new(account).extract_from(table)
+          items = TransactionExtractor.new(account, 0).extract_from(table)
           items[0].amount_in_pence.should == -10074
         end
       end
@@ -56,7 +56,7 @@ describe TransactionExtractor do
             double(:row, :all => [ cell('02/10/2013'), cell('A refund payment made to the card'), cell('-£100.74') ] )
         ] }
         it 'should make a negative amount in the input a positive amount' do
-          items = TransactionExtractor.new(account).extract_from(table)
+          items = TransactionExtractor.new(account, 0).extract_from(table)
           items[0].amount_in_pence.should == 10074
         end
       end
