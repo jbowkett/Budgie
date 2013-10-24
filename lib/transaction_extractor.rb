@@ -2,7 +2,7 @@ require_relative '../common/transaction'
 
 class TransactionExtractor
 
-  StatementEntry = Struct.new(:date, :narrative, :credit, :debit)
+  StatementEntry = Struct.new(:date, :narrative, :amount, :debit)
 
   attr_reader :account, :resulting_balance
 
@@ -28,9 +28,9 @@ class TransactionExtractor
   def extract_transactions(rows)
     rows.map do |entry|
       if account.is_credit_card?
-        amount_in_pence = negate(to_pence(entry.credit))
+        amount_in_pence = entry.amount
       else
-        amount_in_pence = is_credit?(entry) ? to_pence(entry.credit) : negate(to_pence(entry.debit))
+        amount_in_pence = is_credit?(entry) ? TransactionExtractor.to_pence(entry.amount) : TransactionExtractor.negate(TransactionExtractor.to_pence(entry.debit))
       end
       Transaction.new(Date.strptime(entry.date, '%d/%m/%Y'),
                       entry.narrative,
@@ -39,7 +39,7 @@ class TransactionExtractor
     end
   end
 
-  def negate(amount)
+  def self.negate(amount)
     amount * -1
   end
 
@@ -47,7 +47,7 @@ class TransactionExtractor
     entry.debit.nil? || entry.debit.empty?
   end
 
-  def to_pence(raw_amount)
+  def self.to_pence(raw_amount)
     Float(raw_amount.gsub(/£|\+/, '')) * 100.00
   end
 
@@ -63,8 +63,9 @@ class TransactionExtractor
   class CreditCardExtractor
     def extract_statement_entry(row_cells)
       narrative = row_cells[1].text
-      amount = row_cells[2].text
-      StatementEntry.new(row_cells[0].text, narrative, amount, nil)
+      amount_raw = row_cells[2].text
+      amount = TransactionExtractor.negate(TransactionExtractor.to_pence(amount_raw))
+      StatementEntry.new(row_cells[0].text, narrative, amount)
     end
   end
   class BalanceRowExtractor
