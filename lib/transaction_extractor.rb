@@ -67,7 +67,7 @@ class TransactionExtractor
 
       extractor = EXTRACTORS.fetch(row_cells.length)
       extractor.extract_statement_entry(row_cells)
-    end.compact!
+    end.compact
   end
 
   def extract_transactions(rows)
