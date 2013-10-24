@@ -14,14 +14,7 @@ class TransactionExtractor
     def extract_statement_entry(row_cells)
       narrative = row_cells[1].text
       amount = row_cells[2].text
-      if amount =~ /.*\-.*/
-        debit = amount
-        credit = nil
-      else
-        debit = nil
-        credit = amount
-      end
-      StatementEntry.new(row_cells[0].text, narrative, credit, debit)
+      StatementEntry.new(row_cells[0].text, narrative, amount, nil)
     end
   end
   class BalanceRowExtractor
@@ -73,8 +66,7 @@ class TransactionExtractor
   def extract_transactions(rows)
     rows.map do |entry|
       if account.is_credit_card?
-        amount = entry.credit || entry.debit
-        amount_in_pence = negate(to_pence(amount))
+        amount_in_pence = negate(to_pence(entry.credit))
       else
         amount_in_pence = is_credit?(entry) ? to_pence(entry.credit) : negate(to_pence(entry.debit))
       end
