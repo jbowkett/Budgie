@@ -1,36 +1,6 @@
 require_relative '../common/transaction'
 
 class TransactionExtractor
-  class RecentItemsCurrentAccountExtractor
-    def extract_statement_entry(row_cells)
-      narrative = row_cells[1].text
-      credit = row_cells[2].text
-      debit = row_cells[3].text
-      StatementEntry.new(row_cells[0].text, narrative, credit, debit)
-    end
-  end
-
-  class CreditCardExtractor
-    def extract_statement_entry(row_cells)
-      narrative = row_cells[1].text
-      amount = row_cells[2].text
-      StatementEntry.new(row_cells[0].text, narrative, amount, nil)
-    end
-  end
-  class BalanceRowExtractor
-    def extract_statement_entry(row_cells)
-      nil # ignore balance lines
-    end
-  end
-  class OlderStatementCurrentAccountExtractor
-    def extract_statement_entry(row_cells)
-      narrative = row_cells[1].text
-      credit = row_cells[2].text
-      debit = row_cells[3].text
-      balance = row_cells[4].text
-      StatementEntry.new(row_cells[0].text, narrative, credit, debit)
-    end
-  end
 
   StatementEntry = Struct.new(:date, :narrative, :credit, :debit)
 
@@ -44,15 +14,6 @@ class TransactionExtractor
     rows = extract_statement_entries(table)
     extract_transactions(rows.compact)
   end
-
-  private
-
-  EXTRACTORS = {
-      1 => BalanceRowExtractor.new,
-      3 => CreditCardExtractor.new,
-      4 => RecentItemsCurrentAccountExtractor.new,
-      #5 => OlderStatementCurrentAccountExtractor.new
-  }
 
   def extract_statement_entries(table)
     table.map do |row|
@@ -88,4 +49,43 @@ class TransactionExtractor
   def to_pence(raw_amount)
     Float(raw_amount.gsub(/£|\+/, '')) * 100.00
   end
+
+  class RecentItemsCurrentAccountExtractor
+    def extract_statement_entry(row_cells)
+      narrative = row_cells[1].text
+      credit = row_cells[2].text
+      debit = row_cells[3].text
+      StatementEntry.new(row_cells[0].text, narrative, credit, debit)
+    end
+  end
+
+  class CreditCardExtractor
+    def extract_statement_entry(row_cells)
+      narrative = row_cells[1].text
+      amount = row_cells[2].text
+      StatementEntry.new(row_cells[0].text, narrative, amount, nil)
+    end
+  end
+  class BalanceRowExtractor
+    def extract_statement_entry(row_cells)
+      nil # ignore balance lines
+    end
+  end
+  class OlderStatementCurrentAccountExtractor
+    def extract_statement_entry(row_cells)
+      narrative = row_cells[1].text
+      credit = row_cells[2].text
+      debit = row_cells[3].text
+      balance = row_cells[4].text
+      StatementEntry.new(row_cells[0].text, narrative, credit, debit)
+    end
+  end
+
+  private
+  EXTRACTORS = {
+      1 => BalanceRowExtractor.new,
+      3 => CreditCardExtractor.new,
+      4 => RecentItemsCurrentAccountExtractor.new,
+      #5 => OlderStatementCurrentAccountExtractor.new
+  }
 end
