@@ -32,7 +32,7 @@ class BalanceHandler
   def balance_from(the_row)
     balance = Float(the_row.balance.gsub(/£|\+|-/, ''))
     balance *= -1 if the_row.balance =~ /.*-/
-    balance
+    Integer(balance * 100)
   end
 
   def account_matcher

@@ -20,7 +20,7 @@ describe '#extract_balance' do
     let(:is_credit_card) { false }
     it 'should extract the balance' do
       balance = BalanceHandler.new(account).extract_balance(@session)
-      balance.should == 156.01
+      balance.should == 15601
     end
   end
 
@@ -30,7 +30,7 @@ describe '#extract_balance' do
     let(:is_credit_card) { false }
     it 'should extract the balance' do
       balance = BalanceHandler.new(account).extract_balance(@session)
-      balance.should == -165.12
+      balance.should == -16512
     end
   end
 
@@ -41,7 +41,7 @@ describe '#extract_balance' do
 
     it 'should extract the balance' do
       balance = BalanceHandler.new(account).extract_balance(@session)
-      balance.should == 141.11
+      balance.should == 14111
     end
   end
 end
