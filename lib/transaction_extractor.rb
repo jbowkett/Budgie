@@ -27,44 +27,55 @@ class TransactionExtractor
 
   def extract_transactions(rows)
     rows.map do |entry|
-      if account.is_credit_card?
-        amount_in_pence = entry.amount
-      else
-        amount_in_pence = is_credit?(entry) ? TransactionExtractor.to_pence(entry.amount) : TransactionExtractor.negate(TransactionExtractor.to_pence(entry.debit))
-      end
       Transaction.new(Date.strptime(entry.date, '%d/%m/%Y'),
                       entry.narrative,
-                      amount_in_pence,
+                      entry.amount,
                       account)
     end
   end
 
-  def self.negate(amount)
-    amount * -1
-  end
 
   def is_credit?(entry)
     entry.debit.nil? || entry.debit.empty?
   end
 
-  def self.to_pence(raw_amount)
-    Float(raw_amount.gsub(/£|\+/, '')) * 100.00
+  class Extractor
+    def is_present?(value)
+      !String(value).empty?
+    end
+
+    def negate(amount)
+      amount * -1
+    end
+    def to_pence(raw_amount)
+      Integer(Float(raw_amount.gsub(/£|\+/, '')) * 100.00)
+    end
+
   end
 
-  class RecentItemsCurrentAccountExtractor
+  class RecentItemsCurrentAccountExtractor  < Extractor
     def extract_statement_entry(row_cells)
       narrative = row_cells[1].text
       credit = row_cells[2].text
       debit = row_cells[3].text
-      StatementEntry.new(row_cells[0].text, narrative, credit, debit)
+
+      amount = is_present?(debit) ? debit : credit
+
+      amount_in_pence = to_pence(amount)
+
+      amount_in_pence = negate(amount_in_pence) if is_present?(debit)
+
+      StatementEntry.new(row_cells[0].text, narrative, amount_in_pence, debit)
     end
+
+
   end
 
-  class CreditCardExtractor
+  class CreditCardExtractor  < Extractor
     def extract_statement_entry(row_cells)
       narrative = row_cells[1].text
       amount_raw = row_cells[2].text
-      amount = TransactionExtractor.negate(TransactionExtractor.to_pence(amount_raw))
+      amount = negate(to_pence(amount_raw))
       StatementEntry.new(row_cells[0].text, narrative, amount)
     end
   end
@@ -73,7 +84,7 @@ class TransactionExtractor
       nil # ignore balance lines
     end
   end
-  class OlderStatementCurrentAccountExtractor
+  class OlderStatementCurrentAccountExtractor < Extractor
     def extract_statement_entry(row_cells)
       narrative = row_cells[1].text
       credit = row_cells[2].text
