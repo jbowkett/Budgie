@@ -7,8 +7,8 @@ class RecentItemsHandler
     @transaction_extractor = transaction_extractor
   end
 
-  def handle(page)
+  def handle(page, final_balance)
     table = page.all('table.summarytable tbody tr')
-    transaction_extractor.extract_from(table)
+    transaction_extractor.extract_from(table, final_balance)
   end
 end

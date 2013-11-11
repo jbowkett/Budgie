@@ -4,14 +4,13 @@ class TransactionExtractor
 
   StatementEntry = Struct.new(:date, :narrative, :amount, :debit)
 
-  attr_reader :account, :resulting_balance
+  attr_reader :account
 
-  def initialize(account, resulting_balance)
+  def initialize(account)
     @account = account
-    @resulting_balance = resulting_balance
   end
 
-  def extract_from(table)
+  def extract_from(table, final_balance)
     rows = extract_statement_entries(table)
     extract_transactions(rows.compact)
   end
