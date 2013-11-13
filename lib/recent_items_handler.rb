@@ -11,4 +11,9 @@ class RecentItemsHandler
     table = page.all('table.summarytable tbody tr')
     transaction_extractor.extract_from(table, final_balance)
   end
+
+  def move_on(page)
+    page.click_button('previous statements')
+  end
+
 end
