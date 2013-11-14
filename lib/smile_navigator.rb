@@ -1,13 +1,13 @@
 require 'capybara'
 
 class SmileNavigator
-  attr_reader :login_step_one, :login_step_two, :login_step_three, :balance, :recent_items, :previous_statements, :session
-  private     :login_step_one, :login_step_two, :login_step_three, :balance, :recent_items, :previous_statements, :session
+  attr_reader :login_step_one, :login_step_two, :login_step_three, :balance, :recent_items, :statement_history, :previous_statements, :session
+  private     :login_step_one, :login_step_two, :login_step_three, :balance, :recent_items, :statement_history, :previous_statements, :session
 
-  def initialize(login_step_one, login_step_two, login_step_three, balance, recent_items, previous_statements)
+  def initialize(login_step_one, login_step_two, login_step_three, balance, recent_items, statement_history, previous_statements)
     @login_step_one, @login_step_two, @login_step_three = login_step_one, login_step_two, login_step_three
     @login_step_three, @balance, @recent_items = login_step_three, balance, recent_items
-    @previous_statements = previous_statements
+    @statement_history, @previous_statements = statement_history, previous_statements
     @session = init_session
   end
 
@@ -41,8 +41,12 @@ class SmileNavigator
     sleep(2)
     recent_items.move_on(session)
     sleep(2)
-    prev_txns = previous_statements.handle(session)
-    recent_txns + prev_txns
+    statement_history.move_on(session)
+    # sleep(2)
+    # previous_statements.handle(session, total_balance)
+    # sleep(2)
+    # previous_statements.move_on(session)
+    # recent_txns + prev_txns
   end
 end
 
