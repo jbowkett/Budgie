@@ -1,4 +1,5 @@
 require 'capybara'
+require_relative '../common/statement'
 
 class SmileNavigator
   attr_reader :login_step_one, :login_step_two, :login_step_three, :balance, :recent_items, :statement_history, :previous_statements, :session
@@ -33,7 +34,7 @@ class SmileNavigator
     sleep(2)
     login_step_three.move_on(session)
     sleep(2)
-    total_balance = balance.extract_balance(session)  # maybe get the balance back?..call it extract balance
+    total_balance = balance.extract_balance(session)
     sleep(2)
     balance.move_on(session)
     sleep(2)
@@ -44,7 +45,7 @@ class SmileNavigator
     statement_history.move_on(session)
     sleep(2)
     prev_txns = previous_statements.handle(session)
-    recent_txns + prev_txns
+    Statement.new(Date.today, account, total_balance, recent_txns + prev_txns)
   end
 end
 

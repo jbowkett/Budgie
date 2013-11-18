@@ -38,8 +38,8 @@ statement_history = StatementHistoryHandler.new
 previous_statements = PreviousStatementsHandler.new(TransactionExtractor.new(account))
 
 smile_extractor = SmileNavigator.new(login_step_one, login_step_two, login_step_three, balance, recent_items, statement_history, previous_statements)
-txns = smile_extractor.extract
+stmt = smile_extractor.extract
 
-txns.each do |txn|
+stmt.transactions.each do |txn|
   puts "#{txn.date}\t#{txn.amount_in_pence}\t#{txn.balance_in_pence}\t#{txn.narrative}"
 end
