@@ -41,5 +41,5 @@ smile_extractor = SmileNavigator.new(login_step_one, login_step_two, login_step_
 txns = smile_extractor.extract
 
 txns.each do |txn|
-  puts "#{txn.date}\t#{txn.narrative}\t#{txn.amount_in_pence}\t#{txn.balance_in_pence}"
+  puts "#{txn.date}\t#{txn.amount_in_pence}\t#{txn.balance_in_pence}\t#{txn.narrative}"
 end
