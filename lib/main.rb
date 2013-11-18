@@ -13,7 +13,7 @@ def usage
   'Main <memorable date> <memorable name> <first school> <last school> <security code> <account no> [sortcode]'
 end
 
-if ARGV.length != 7
+if ARGV.length != 6 && ARGV.length != 7
   puts usage
   exit(-1)
 end
@@ -24,7 +24,7 @@ first_school   = ARGV[2]
 last_school    = ARGV[3]
 security_code  = ARGV[4]
 account_no     = ARGV[5]
-sortcode       = ARGV[6]
+sortcode       = ARGV.length == 7 ? ARGV[6] : nil
 
 account = Account.new(account_no, sortcode)
 login = LoginDetails.new(first_school, last_school, memorable_name, memorable_date, security_code)
