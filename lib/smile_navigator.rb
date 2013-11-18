@@ -42,11 +42,9 @@ class SmileNavigator
     recent_items.move_on(session)
     sleep(2)
     statement_history.move_on(session)
-    # sleep(2)
-    # previous_statements.handle(session, total_balance)
-    # sleep(2)
-    # previous_statements.move_on(session)
-    # recent_txns + prev_txns
+    sleep(2)
+    prev_txns = previous_statements.handle(session)
+    recent_txns + prev_txns
   end
 end
 

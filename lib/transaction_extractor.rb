@@ -92,9 +92,19 @@ class TransactionExtractor
       narrative = row_cells[1].text
       credit = row_cells[2].text
       debit = row_cells[3].text
-      balance = row_cells[4].text
-      #balance = to_pence(row_cells[4].text)
-      StatementEntry.new(row_cells[0].text, narrative, credit, balance)
+
+      return nil if !is_present?(debit) && !is_present?(credit)
+
+      balance_raw = row_cells[4].text
+
+      balance = to_pence(balance_raw.gsub('-',''))
+      balance = negate(balance) if balance_raw =~ /.*-.*/
+
+      amount = is_present?(debit) ? debit : credit
+      amount_in_pence = to_pence(amount)
+      amount_in_pence = negate(amount_in_pence) if is_present?(debit)
+
+      StatementEntry.new(row_cells[0].text, narrative, amount_in_pence, balance)
     end
   end
 
@@ -103,6 +113,6 @@ class TransactionExtractor
       1 => BalanceRowExtractor.new,
       3 => CreditCardExtractor.new,
       4 => RecentItemsCurrentAccountExtractor.new,
-      #5 => OlderStatementCurrentAccountExtractor.new
+      5 => OlderStatementCurrentAccountExtractor.new
   }
 end
