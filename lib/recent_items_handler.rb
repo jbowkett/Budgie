@@ -13,7 +13,7 @@ class RecentItemsHandler
   end
 
   def move_on(page)
-    page.click_button('previous statements')
+    page.click_link 'view previous statements'
   end
 
 end
