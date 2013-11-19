@@ -13,6 +13,8 @@ class LoginStepThreeHandler
       page.fill_in('lastSchool', :with => login_details.last_school)
     elsif page.has_css? '#firstschool'
       page.fill_in('firstSchool', :with => login_details.first_school)
+    elsif page.has_css? '#birthplace'
+      page.fill_in('birthPlace', :with => login_details.birth_place)
     elsif page.has_css? '#memorabledate'
       page.fill_in('memorabledate', :with => pad(login_details.memorable_date.day.to_s))
       page.fill_in('memorableMonth', :with => pad(login_details.memorable_date.month.to_s))

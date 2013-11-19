@@ -14,10 +14,12 @@ describe '#handle' do
   let(:memorable_name) { 'memorable name' }
   let(:memorable_date) { Date.parse('01-01-2013') }
   let(:last_school) { 'Brighton Borstal' }
+  let(:birth_place) { 'Timbuktu' }
   let(:first_school) { 'Brighton Borstal' }
   let(:login_details) { double(:login_details, { :memorable_name => memorable_name,
                                                  :last_school => last_school,
                                                  :first_school => first_school,
+                                                 :birth_place => birth_place,
                                                  :memorable_date => memorable_date } ) }
 
   it 'should fill out the memorable name' do
@@ -36,6 +38,12 @@ describe '#handle' do
     @session.visit("file:///Users/jbowkett/other/Smile-Bank-Txn-Downloader/spec/fixtures/login_three_first_school.html")
     LoginStepThreeHandler.new(login_details).handle(@session)
     @session.find('#firstschool')['value'].should == first_school
+  end
+
+  it 'should fill out the birth place' do
+    @session.visit("file:///Users/jbowkett/other/Smile-Bank-Txn-Downloader/spec/fixtures/login_three_place_of_birth.html")
+    LoginStepThreeHandler.new(login_details).handle(@session)
+    @session.find('#birthplace')['value'].should == birth_place
   end
 
   context 'for a memorable date' do

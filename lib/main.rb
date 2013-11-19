@@ -11,10 +11,10 @@ require_relative 'statement_history_handler'
 require_relative 'previous_statements_handler'
 
 def usage
-  'Main <memorable date> <memorable name> <first school> <last school> <security code> <account no> [sortcode]'
+  'Main <memorable date> <memorable name> <first school> <last school> <birth place> <security code> <account no> [sortcode]'
 end
 
-if ARGV.length != 6 && ARGV.length != 7
+if ARGV.length != 7 && ARGV.length != 8
   puts usage
   exit(-1)
 end
@@ -23,12 +23,13 @@ memorable_date = Date.parse(ARGV[0])
 memorable_name = ARGV[1]
 first_school   = ARGV[2]
 last_school    = ARGV[3]
-security_code  = ARGV[4]
-account_no     = ARGV[5]
-sortcode       = ARGV.length == 7 ? ARGV[6] : nil
+birth_place    = ARGV[4]
+security_code  = ARGV[5]
+account_no     = ARGV[6]
+sortcode       = ARGV.length == 8 ? ARGV[7] : nil
 
 account = Account.new(account_no, sortcode)
-login = LoginDetails.new(first_school, last_school, memorable_name, memorable_date, security_code)
+login = LoginDetails.new(first_school, last_school, birth_place, memorable_name, memorable_date, security_code)
 
 login_step_one = LoginStepOneHandler.new(account)
 login_step_two = LoginStepTwoHandler.new(login)
@@ -38,7 +39,7 @@ recent_items = RecentItemsHandler.new(TransactionExtractor.new(account))
 statement_history = StatementHistoryHandler.new
 previous_statements = PreviousStatementsHandler.new(TransactionExtractor.new(account))
 
-smile_extractor = SmileNavigator.new(login_step_one, login_step_two, login_step_three, balance, recent_items, statement_history, previous_statements)
+smile_extractor = SmileNavigator.new(account, login_step_one, login_step_two, login_step_three, balance, recent_items, statement_history, previous_statements)
 stmt = smile_extractor.extract
 
 stmt.transactions.each do |txn|
