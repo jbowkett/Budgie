@@ -1,3 +1,4 @@
+require_relative 'smile_navigator'
 require_relative 'login_details'
 require_relative '../common/account'
 require_relative 'login_step_one_handler'
@@ -18,7 +19,7 @@ if ARGV.length != 6 && ARGV.length != 7
   exit(-1)
 end
 
-memorable_date = ARGV[0]
+memorable_date = Date.parse(ARGV[0])
 memorable_name = ARGV[1]
 first_school   = ARGV[2]
 last_school    = ARGV[3]
