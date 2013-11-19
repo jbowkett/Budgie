@@ -7,15 +7,14 @@ class PreviousStatementsHandler
   end
 
   def handle(page)
-    prev_txns = Array
-    while page.has_css? "/html/body/table/tbody/tr/td/table/tbody/tr/td/table/tbody/tr/td/table/tbody/tr/td/a/img@[alt=\'previous statement page\']"
+    prev_txns = Array.new
+    while page.has_link?('previous statement page') && page.has_no_css?('.error')
 
       prev_txns += extract_transactions(page)
 
-      page.click_link 'back a page'
+      page.click_link 'previous statement page'
       sleep(2)
     end
-    prev_txns += extract_transactions(page)
     prev_txns
   end
 
@@ -25,6 +24,4 @@ class PreviousStatementsHandler
     statement = table.reject &statement_details
     transaction_extractor.extract_from(statement, -1).compact
   end
-
-
 end
