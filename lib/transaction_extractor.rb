@@ -16,6 +16,8 @@ class TransactionExtractor
   end
 
   def extract_statement_entries(table, closing_balance_in_pence)
+    table = sort(table)
+
     current_balance_in_pence = closing_balance_in_pence
     table.map do |row|
       row_cells = row.all('td')
@@ -25,6 +27,18 @@ class TransactionExtractor
         current_balance_in_pence -= stmt_entry.amount unless stmt_entry.nil?
       end
     end.compact
+  end
+
+  def sort(table)
+    table.sort do |a, b|
+      a_cells = a.all('td')
+      b_cells = b.all('td')
+      if a_cells.size > 1 && b_cells.length > 1
+        Date.parse(b_cells[0].text) <=> Date.parse(a_cells[0].text)
+      else
+        0 #if a_cells.size <= 1 || b_cells.size <=1
+      end
+    end
   end
 
   def extract_transactions(rows)

@@ -13,23 +13,41 @@ describe TransactionExtractor do
       let(:is_credit_card) { false }
       context 'and transactions without a balance' do
         context 'for debit transactions' do
-          let(:table) { [
-              double(:row, :all => [cell('02/10/2013'), cell('A Bill'), cell(''), cell('£10.74')]), # 100.00
-              double(:row, :all => [cell('01/10/2013'), cell('A Bill'), cell(''), cell('£10.56')]) # 110.74
-          ] }
+          context 'that are ordered newest first' do
+            let(:table) { [
+                double(:row, :all => [cell('02/10/2013'), cell('A Bill'), cell(''), cell('£10.74')]), # 100.00
+                double(:row, :all => [cell('01/10/2013'), cell('A Bill'), cell(''), cell('£10.56')]) # 110.74
+            ] }
 
-          it 'should extract the transactions' do
-            items = TransactionExtractor.new(account).extract_from(table, 0)
-            items.size.should == 2
-            items[0].amount_in_pence.should == -1074
-            items[1].amount_in_pence.should == -1056
+            it 'should extract the transactions' do
+              items = TransactionExtractor.new(account).extract_from(table, 0)
+              items.size.should == 2
+              items[0].amount_in_pence.should == -1074
+              items[1].amount_in_pence.should == -1056
+            end
+
+            it 'should set the balance' do
+              items = TransactionExtractor.new(account).extract_from(table, 10000)
+              items[0].balance_in_pence.should == 10000
+              items[1].balance_in_pence.should == 11074
+            end
+
+          end
+          context 'that are ordered oldest first' do
+            let(:table) { [
+                double(:row, :all => [cell('30/09/2013'), cell('A Bill'), cell(''), cell('£10.48')]),
+                double(:row, :all => [cell('01/10/2013'), cell('A Bill'), cell(''), cell('£10.56')]),
+                double(:row, :all => [cell('13/10/2013'), cell('A Bill'), cell(''), cell('£10.74')])
+            ] }
+
+            it 're orders the transactions' do
+              items = TransactionExtractor.new(account).extract_from(table, 0)
+              items[0].date.should == Date.parse('13-10-2013')
+              items[2].date.should == Date.parse('30-09-2013')
+            end
+
           end
 
-          it 'should set the balance' do
-            items = TransactionExtractor.new(account).extract_from(table, 10000)
-            items[0].balance_in_pence.should == 10000
-            items[1].balance_in_pence.should == 11074
-          end
         end
 
 
