@@ -2,10 +2,11 @@ require 'capybara'
 require_relative '../common/statement'
 
 class SmileNavigator
-  attr_reader :login_step_one, :login_step_two, :login_step_three, :balance, :recent_items, :statement_history, :previous_statements, :session
-  private     :login_step_one, :login_step_two, :login_step_three, :balance, :recent_items, :statement_history, :previous_statements, :session
+  attr_reader :account, :login_step_one, :login_step_two, :login_step_three, :balance, :recent_items, :statement_history, :previous_statements, :session
+  private     :account, :login_step_one, :login_step_two, :login_step_three, :balance, :recent_items, :statement_history, :previous_statements, :session
 
-  def initialize(login_step_one, login_step_two, login_step_three, balance, recent_items, statement_history, previous_statements)
+  def initialize(account, login_step_one, login_step_two, login_step_three, balance, recent_items, statement_history, previous_statements)
+    @account = account
     @login_step_one, @login_step_two, @login_step_three = login_step_one, login_step_two, login_step_three
     @login_step_three, @balance, @recent_items = login_step_three, balance, recent_items
     @statement_history, @previous_statements = statement_history, previous_statements
@@ -45,7 +46,9 @@ class SmileNavigator
     statement_history.move_on(session)
     sleep(2)
     prev_txns = previous_statements.handle(session)
-    Statement.new(Date.today, account, total_balance, recent_txns + prev_txns)
+    sleep(2)
+    session.click_link 'exit'
+    Statement.new(Date.today, account, total_balance, (recent_txns + prev_txns))
   end
 end
 
