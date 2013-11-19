@@ -30,14 +30,19 @@ class TransactionExtractor
   end
 
   def sort(table)
-    table.sort do |a, b|
-      a_cells = a.all('td')
-      b_cells = b.all('td')
-      if a_cells.size > 1 && b_cells.length > 1
-        Date.parse(b_cells[0].text) <=> Date.parse(a_cells[0].text)
-      else
-        0 #if a_cells.size <= 1 || b_cells.size <=1
-      end
+    last_row = table.last.all('td')
+    first_row = table.first.all('td')
+
+    if last_row.size < 2
+      last_row = table[-2].all('td')
+    end
+
+    last_row_date = Date.parse(last_row[0].text)
+    first_row_date = Date.parse(first_row[0].text)
+    if last_row_date > first_row_date
+      table.reverse
+    else
+      table
     end
   end
 
