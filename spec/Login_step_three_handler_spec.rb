@@ -12,7 +12,7 @@ describe '#handle' do
   end
 
   let(:memorable_name) { 'memorable name' }
-  let(:memorable_date) { Date.today }
+  let(:memorable_date) { Date.parse('01-01-2013') }
   let(:last_school) { 'Brighton Borstal' }
   let(:first_school) { 'Brighton Borstal' }
   let(:login_details) { double(:login_details, { :memorable_name => memorable_name,
@@ -44,10 +44,10 @@ describe '#handle' do
       LoginStepThreeHandler.new(login_details).handle(@session)
     end
     it 'enters the day' do
-      @session.find('#memorabledate')['value'].should == memorable_date.day.to_s
+      @session.find('#memorabledate')['value'].should == '01'
     end
     it 'enters the month' do
-      @session.find('#memorabledate').parent.find(:xpath, "//input[@name='memorableMonth']")['value'].should == memorable_date.month.to_s
+      @session.find('#memorabledate').parent.find(:xpath, "//input[@name='memorableMonth']")['value'].should == '01'
     end
     it 'enters the year' do
       @session.find('#memorabledate').parent.find(:xpath, "//input[@name='memorableYear']")['value'].should == memorable_date.year.to_s
