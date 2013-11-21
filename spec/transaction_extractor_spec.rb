@@ -42,8 +42,8 @@ describe TransactionExtractor do
 
             it 're orders the transactions' do
               items = TransactionExtractor.new(account).extract_from(table, 0)
-              items[0].date.should == Date.parse('13-10-2013')
-              items[2].date.should == Date.parse('30-09-2013')
+              items[0].transaction_date.should == Date.parse('13-10-2013')
+              items[2].transaction_date.should == Date.parse('30-09-2013')
             end
 
           end
