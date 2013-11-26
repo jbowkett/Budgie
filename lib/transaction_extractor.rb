@@ -4,8 +4,6 @@ require 'date'
 
 class TransactionExtractor
 
-  StatementEntry = Struct.new(:date, :narrative, :amount, :balance_in_pence)
-
   attr_reader :account
 
   def initialize(account)
@@ -13,8 +11,7 @@ class TransactionExtractor
   end
 
   def extract_from(table, closing_balance_in_pence)
-    rows = extract_statement_entries(table, closing_balance_in_pence)
-    extract_transactions(rows.compact)
+    extract_statement_entries(table, closing_balance_in_pence).compact
   end
 
   def extract_statement_entries(table, closing_balance_in_pence)
@@ -26,8 +23,8 @@ class TransactionExtractor
       row_cells = row.all('td')
 
       extractor = EXTRACTORS.fetch(row_cells.length)
-      extractor.extract_statement_entry(row.timestamp, row_cells, current_balance_in_pence).tap do |stmt_entry|
-        current_balance_in_pence -= stmt_entry.amount unless stmt_entry.nil?
+      extractor.extract_statement_entry(row.timestamp, row_cells, current_balance_in_pence, account).tap do |stmt_entry|
+        current_balance_in_pence -= stmt_entry.amount_in_pence unless stmt_entry.nil?
       end
     end.compact
   end
@@ -57,17 +54,6 @@ class TransactionExtractor
     end
   end
 
-  def extract_transactions(rows)
-    rows.map do |entry|
-      Transaction.new(entry.date,
-                      entry.narrative,
-                      entry.amount,
-                      entry.balance_in_pence,
-                      account)
-    end
-  end
-
-
   def is_credit?(entry)
     entry.debit.nil? || entry.debit.empty?
   end
@@ -87,7 +73,7 @@ class TransactionExtractor
   end
 
   class RecentItemsCurrentAccountExtractor  < Extractor
-    def extract_statement_entry(timestamp, row_cells, balance_after_transaction)
+    def extract_statement_entry(timestamp, row_cells, balance_after_transaction, account)
       narrative = row_cells[1].text
       credit = row_cells[2].text
       debit = row_cells[3].text
@@ -98,27 +84,27 @@ class TransactionExtractor
 
       amount_in_pence = negate(amount_in_pence) if is_present?(debit)
 
-      StatementEntry.new(timestamp, narrative, amount_in_pence, balance_after_transaction)
+      Transaction.new(timestamp, narrative, amount_in_pence, balance_after_transaction, account)
     end
 
 
   end
 
   class CreditCardExtractor  < Extractor
-    def extract_statement_entry(timestamp, row_cells, balance_after_transaction)
+    def extract_statement_entry(timestamp, row_cells, balance_after_transaction, account)
       narrative = row_cells[1].text
       amount_raw = row_cells[2].text
       amount = negate(to_pence(amount_raw))
-      StatementEntry.new(timestamp, narrative, amount, balance_after_transaction)
+      Transaction.new(timestamp, narrative, amount, balance_after_transaction, account)
     end
   end
   class BalanceRowExtractor
-    def extract_statement_entry(timestamp, row_cells, balance_after_transaction)
+    def extract_statement_entry(timestamp, row_cells, balance_after_transaction, account)
       nil # ignore balance lines
     end
   end
   class OlderStatementCurrentAccountExtractor < Extractor
-    def extract_statement_entry(timestamp, row_cells, balance_after_transaction)
+    def extract_statement_entry(timestamp, row_cells, balance_after_transaction, account)
       narrative = row_cells[1].text
       credit = row_cells[2].text
       debit = row_cells[3].text
@@ -134,7 +120,7 @@ class TransactionExtractor
       amount_in_pence = to_pence(amount)
       amount_in_pence = negate(amount_in_pence) if is_present?(debit)
 
-      StatementEntry.new(timestamp, narrative, amount_in_pence, balance)
+      Transaction.new(timestamp, narrative, amount_in_pence, balance, account)
     end
   end
 
