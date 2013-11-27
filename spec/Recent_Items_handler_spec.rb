@@ -11,9 +11,10 @@ describe '#handle' do
     @session = Capybara::Session.new(:selenium)
     # todo: get the current directory out of rspec
     @session.visit("file:///Users/jbowkett/other/Smile-Bank-Txn-Downloader/spec/fixtures/recent_items.html")
+    DataMapper.finalize
   end
 
-  let(:account) { double(:account, :account_id => account_id, :sort_code => sort_code, :is_credit_card? => is_credit_card) }
+  let(:account) { double(:account, :id => 1, :account_id => account_id, :sort_code => sort_code, :is_credit_card? => is_credit_card) }
 
   context 'for a positive balance' do
     let(:account_id) { '1234567' }

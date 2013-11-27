@@ -11,6 +11,7 @@ describe '#extract_transactions' do
     @session = Capybara::Session.new(:selenium)
     # todo: get the current directory out of rspec
     @session.visit("file:///Users/jbowkett/other/Smile-Bank-Txn-Downloader/spec/fixtures/statement_back_a_page.html")
+    DataMapper.finalize
   end
 
   let (:account){ double(:account).as_null_object }

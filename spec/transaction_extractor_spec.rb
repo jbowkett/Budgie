@@ -1,14 +1,17 @@
 require 'rspec'
 require_relative '../lib/transaction_extractor'
 require 'date'
-
+require 'data_mapper'
 
 describe TransactionExtractor do
+  before do
+    DataMapper.finalize
+  end
   describe '#extractFrom' do
     def cell(text)
       double(:cell, :text => text)
     end
-    let(:account) { double(:account, :is_credit_card? => is_credit_card) }
+    let(:account) { double(:account, :id => 1, :is_credit_card? => is_credit_card) }
     context 'for a regular account' do
       let(:is_credit_card) { false }
       context 'and transactions without a balance' do

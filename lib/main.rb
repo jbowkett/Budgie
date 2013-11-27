@@ -1,6 +1,8 @@
+require 'data_mapper'
+require_relative '../common/account'
+require_relative '../common/budgie_storage'
 require_relative 'smile_navigator'
 require_relative 'login_details'
-require_relative '../common/account'
 require_relative 'login_step_one_handler'
 require_relative 'login_step_two_handler'
 require_relative 'login_step_three_handler'
@@ -28,7 +30,12 @@ security_code  = ARGV[5]
 account_no     = ARGV[6]
 sortcode       = ARGV.length == 8 ? ARGV[7] : nil
 
-account = Account.new(account_no, sortcode)
+DataMapper::Logger.new($stdout, :debug)
+DataMapper.setup(:default, 'mysql://localhost/budgie')
+DataMapper.finalize
+
+storage = BudgieStorage.new
+account = storage.account(account_no, sortcode)
 login = LoginDetails.new(first_school, last_school, birth_place, memorable_name, memorable_date, security_code)
 
 login_step_one = LoginStepOneHandler.new(account)
@@ -41,7 +48,5 @@ previous_statements = PreviousStatementsHandler.new(TransactionExtractor.new(acc
 
 smile_extractor = SmileNavigator.new(account, login_step_one, login_step_two, login_step_three, balance, recent_items, statement_history, previous_statements)
 stmt = smile_extractor.extract
-
-stmt.transactions.each do |txn|
-  puts "#{txn.date}\t#{txn.amount_in_pence}\t#{txn.balance_in_pence}\t#{txn.narrative}"
-end
+storage.persist(stmt)
+puts 'done.'

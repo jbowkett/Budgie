@@ -93,7 +93,10 @@ class TransactionExtractor
 
       amount_in_pence = negate(amount_in_pence) if is_present?(debit)
 
-      Transaction.new(timestamp, narrative, amount_in_pence, balance_after_transaction, account)
+      Transaction.new(:transaction_date => timestamp, :narrative => narrative,
+                      :amount_in_pence => amount_in_pence,
+                      :balance_in_pence => balance_after_transaction,
+                      :account => account)
     end
 
 
@@ -104,7 +107,10 @@ class TransactionExtractor
       narrative = row_cells[1].text
       amount_raw = row_cells[2].text
       amount = negate(to_pence(amount_raw))
-      Transaction.new(timestamp, narrative, amount, balance_after_transaction, account)
+      Transaction.new(:transaction_date => timestamp, :narrative => narrative,
+                      :amount_in_pence => amount,
+                      :balance_in_pence => balance_after_transaction,
+                      :account => account)
     end
   end
   class BalanceRowExtractor
@@ -129,7 +135,10 @@ class TransactionExtractor
       amount_in_pence = to_pence(amount)
       amount_in_pence = negate(amount_in_pence) if is_present?(debit)
 
-      Transaction.new(timestamp, narrative, amount_in_pence, balance, account)
+      Transaction.new(:transaction_date => timestamp, :narrative => narrative,
+                      :amount_in_pence => amount_in_pence,
+                      :balance_in_pence => balance,
+                      :account => account)
     end
   end
 

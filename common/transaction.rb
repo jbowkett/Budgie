@@ -1,20 +1,17 @@
 require 'data_mapper'
+require_relative 'category'
+require_relative 'account'
 
 class Transaction
   include DataMapper::Resource
 
-  property :id,               Serial
-  belongs_to :account
-  property :amount_in_pence,  Integer
-  property :balance_in_pence, Integer
-  property :transaction_date, DateTime
-  property :narrative,        String
+  property :id,                Serial
+  belongs_to :account,         :required => true
+  belongs_to :category,        :required => false
+  property :amount_in_pence,   Integer,    :required => true
+  property :balance_in_pence,  Integer,    :required => true
+  property :transaction_date,  DateTime,   :required => true
+  property :narrative,         String,     :required => false
+  property :category_override, String,     :required => false
 
-  def initialize(transaction_date, narrative, amount_in_pence, balance_in_pence, account)
-    @transaction_date = transaction_date
-    @account = account
-    @amount_in_pence = amount_in_pence
-    @balance_in_pence = balance_in_pence
-    @narrative = narrative
-  end
 end
