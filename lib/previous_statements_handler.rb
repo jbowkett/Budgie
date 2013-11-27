@@ -6,16 +6,21 @@ class PreviousStatementsHandler
     @transaction_extractor = transaction_extractor
   end
 
-  def handle(page)
+  def handle(page, max_transaction_date)
     prev_txns = Array.new
-    while page.has_link?('previous statement page') && page.has_no_css?('.error')
+    while has_previous_stmts_link(page)
 
       prev_txns += extract_transactions(page)
 
+      break if prev_txns.last.transaction_date <= max_transaction_date
       page.click_link 'previous statement page'
       sleep(2)
     end
-    prev_txns
+    prev_txns.reject{|txn| txn.transaction_date <= max_transaction_date }
+  end
+
+  def has_previous_stmts_link(page)
+    page.has_link?('previous statement page') && page.has_no_css?('.error')
   end
 
   def extract_transactions(page)

@@ -2,6 +2,7 @@ require 'rspec'
 require_relative '../lib/recent_items_handler'
 require_relative '../lib/transaction_extractor'
 require 'capybara'
+require 'date'
 
 describe '#handle' do
 
@@ -21,8 +22,13 @@ describe '#handle' do
     let(:sort_code)  { '119185' }
     let(:is_credit_card) { false }
     it 'should extract the balance' do
-      recent_items = RecentItemsHandler.new(TransactionExtractor.new(account)).handle(@session, 956.01)
+      recent_items = RecentItemsHandler.new(TransactionExtractor.new(account)).handle(@session, 956.01, DateTime.parse('01-01-2000 11:58'))
       recent_items.size.should == 7
+    end
+
+    it 'should filter out transactions older than max transaction date' do
+      recent_items = RecentItemsHandler.new(TransactionExtractor.new(account)).handle(@session, 956.01, DateTime.parse('30-09-2013 11:59'))
+      recent_items.size.should == 4
     end
   end
 end

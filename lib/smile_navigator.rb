@@ -20,7 +20,7 @@ class SmileNavigator
     Capybara::Session.new(:selenium)
   end
 
-  def extract
+  def extract(max_transaction_date)
     session.visit("https://banking.smile.co.uk/SmileWeb/start.do")
     sleep(2)
     login_step_one.handle(session) # enter account details
@@ -39,13 +39,13 @@ class SmileNavigator
     sleep(2)
     balance.move_on(session)
     sleep(2)
-    recent_txns = recent_items.handle(session, total_balance)
+    recent_txns = recent_items.handle(session, total_balance, max_transaction_date)
     sleep(2)
     recent_items.move_on(session)
     sleep(2)
     statement_history.move_on(session)
     sleep(2)
-    prev_txns = previous_statements.handle(session)
+    prev_txns = previous_statements.handle(session, max_transaction_date)
     sleep(2)
     session.click_link 'exit'
     Statement.new(Date.today, account, total_balance, (recent_txns + prev_txns))
