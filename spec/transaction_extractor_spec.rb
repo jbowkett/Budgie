@@ -1,13 +1,13 @@
 require 'rspec'
 require_relative '../lib/transaction_extractor'
+require 'date'
 
-
-def cell(text)
-  double(:cell, :text => text)
-end
 
 describe TransactionExtractor do
   describe '#extractFrom' do
+    def cell(text)
+      double(:cell, :text => text)
+    end
     let(:account) { double(:account, :is_credit_card? => is_credit_card) }
     context 'for a regular account' do
       let(:is_credit_card) { false }
@@ -16,12 +16,13 @@ describe TransactionExtractor do
           context 'that are ordered newest first' do
             let(:table) { [
                 double(:row, :all => [cell('02/10/2013'), cell('A Bill'), cell(''), cell('£10.74')]), # 100.00
-                double(:row, :all => [cell('01/10/2013'), cell('A Bill'), cell(''), cell('£10.56')]) # 110.74
+                double(:row, :all => [cell('01/10/2013'), cell('A Bill'), cell(''), cell('£10.56')]), # 110.74
+                double(:row, :all => [cell('01/10/2013'), cell('A Bill'), cell(''), cell('£10.74')])  # 121.30
             ] }
 
             it 'should extract the transactions' do
               items = TransactionExtractor.new(account).extract_from(table, 0)
-              items.size.should == 2
+              items.size.should == 3
               items[0].amount_in_pence.should == -1074
               items[1].amount_in_pence.should == -1056
             end
@@ -30,6 +31,19 @@ describe TransactionExtractor do
               items = TransactionExtractor.new(account).extract_from(table, 10000)
               items[0].balance_in_pence.should == 10000
               items[1].balance_in_pence.should == 11074
+              items[2].balance_in_pence.should == 12130
+            end
+
+            it 'should order the txns newest to oldest and synthesise a timestamp' do
+              items = TransactionExtractor.new(account).extract_from(table, 0)
+              items.size.should == 3
+              items[0].amount_in_pence.should == -1074
+              items[1].amount_in_pence.should == -1056
+              items[2].amount_in_pence.should == -1074
+
+              items[0].transaction_date.should == DateTime.parse('02-10-2013 11:59')
+              items[1].transaction_date.should == DateTime.parse('01-10-2013 11:59')
+              items[2].transaction_date.should == DateTime.parse('01-10-2013 11:58')
             end
 
           end
@@ -40,14 +54,37 @@ describe TransactionExtractor do
                 double(:row, :all => [cell('13/10/2013'), cell('A Bill'), cell(''), cell('£10.74')])
             ] }
 
-            it 're orders the transactions' do
+            it 'should order the transactions newest to oldest' do
               items = TransactionExtractor.new(account).extract_from(table, 0)
-              items[0].transaction_date.should == Date.parse('13-10-2013')
-              items[2].transaction_date.should == Date.parse('30-09-2013')
+              items[0].transaction_date.should == DateTime.parse('13-10-2013 11:59')
+              items[1].transaction_date.should == DateTime.parse('01-10-2013 11:59')
+              items[2].transaction_date.should == DateTime.parse('30-09-2013 11:59')
             end
 
           end
+          context 'with the same date' do
+            let(:table) { [
+                double(:row, :all => [cell('29/09/2013'), cell('A Bill'), cell(''), cell('£10.48')]),
+                double(:row, :all => [cell('30/09/2013'), cell('A Bill'), cell(''), cell('£10.48')]),
+                double(:row, :all => [cell('30/09/2013'), cell('A Bill'), cell(''), cell('£10.56')]),
+                double(:row, :all => [cell('30/09/2013'), cell('A Bill'), cell(''), cell('£10.74')])
+            ] }
 
+            it 'synthesises an ordering timestamp and orders the txns newest to oldest' do
+              items = TransactionExtractor.new(account).extract_from(table, 0)
+              items[0].transaction_date.should == DateTime.parse('30-09-2013 11:59')
+              items[0].amount_in_pence.should == -1074
+
+              items[1].transaction_date.should == DateTime.parse('30-09-2013 11:58')
+              items[1].amount_in_pence.should == -1056
+
+              items[2].transaction_date.should == DateTime.parse('30-09-2013 11:57')
+              items[2].amount_in_pence.should == -1048
+
+              items[3].transaction_date.should == DateTime.parse('29-09-2013 11:59')
+              items[3].amount_in_pence.should == -1048
+            end
+          end
         end
 
 

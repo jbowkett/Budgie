@@ -30,10 +30,19 @@ class TransactionExtractor
   end
 
   def decorate_with_timestamps(table)
+    time_counter = 59
+    prev_date = ''
     table.map do |row|
       row_cells = row.all('td')
       raw_date = row_cells[0].text
-      timestamp = DateTime.parse(raw_date)
+      if prev_date == raw_date
+        time_counter -= 1
+      else
+        prev_date = raw_date
+        time_counter = 59
+      end
+      time_portion = "11:#{time_counter}"
+      timestamp = DateTime.parse("#{raw_date} #{time_portion}")
       RowWrapper.new(timestamp, row)
     end
   end
