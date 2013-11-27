@@ -18,7 +18,7 @@ class BudgieStorage
     balance = balance_storage.create({:account => account,
                                       :balance_in_pence => statement.current_balance_in_pence,
                                       :balance_date => statement.date})
-    txns.map(&:save)
+    txns.reverse.map(&:save)
   end
 
   def account(account_id, sort_code)
