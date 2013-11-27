@@ -17,11 +17,11 @@ describe '#handle' do
 
   let(:account) { double(:account, :id => 1, :account_id => account_id, :sort_code => sort_code, :is_credit_card? => is_credit_card) }
 
-  context 'for a positive balance' do
+  context 'for a current account' do
     let(:account_id) { '1234567' }
     let(:sort_code)  { '119185' }
     let(:is_credit_card) { false }
-    it 'should extract the balance' do
+    it 'should extract the recent transactions' do
       recent_items = RecentItemsHandler.new(TransactionExtractor.new(account)).handle(@session, 956.01, DateTime.parse('01-01-2000 11:58'))
       recent_items.size.should == 7
     end
