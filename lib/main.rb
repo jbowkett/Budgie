@@ -47,6 +47,8 @@ statement_history = StatementHistoryHandler.new
 previous_statements = PreviousStatementsHandler.new(TransactionExtractor.new(account))
 
 smile_extractor = SmileNavigator.new(account, login_step_one, login_step_two, login_step_three, balance, recent_items, statement_history, previous_statements)
-stmt = smile_extractor.extract(storage.max_transaction_date)
+max_transaction_date = storage.max_transaction_date(account)
+max_transaction_date = (max_transaction_date ? max_transaction_date : DateTime.parse('0000-01-01 12:00'))
+stmt = smile_extractor.extract(max_transaction_date)
 storage.persist(stmt)
 puts 'done.'

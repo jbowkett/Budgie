@@ -25,7 +25,7 @@ class BudgieStorage
     account_storage.first_or_create({:account_id => account_id, :sort_code => sort_code})
   end
 
-  def max_transaction_date
-    transaction_storage.max(:transaction_date)
+  def max_transaction_date(account)
+    transaction_storage.max(:transaction_date, :account => account)
   end
 end
