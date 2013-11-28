@@ -15,6 +15,7 @@ class TransactionExtractor
   end
 
   def extract_statement_entries(table, closing_balance_in_pence)
+    return [] if table.size < 2
     sort!(table)
     table = decorate_with_timestamps(table)
 
