@@ -11,13 +11,17 @@ describe '#handle' do
     Capybara.run_server = false
     @session = Capybara::Session.new(:selenium)
     # todo: get the current directory out of rspec
-    @session.visit("file:///Users/jbowkett/other/Smile-Bank-Txn-Downloader/spec/fixtures/recent_items.html")
+
     DataMapper.finalize
   end
 
   let(:account) { double(:account, :id => 1, :account_id => account_id, :sort_code => sort_code, :is_credit_card? => is_credit_card) }
 
   context 'for a current account' do
+    before do
+      @session.visit("file:///Users/jbowkett/other/Smile-Bank-Txn-Downloader/spec/fixtures/recent_items.html")
+    end
+
     let(:account_id) { '1234567' }
     let(:sort_code)  { '119185' }
     let(:is_credit_card) { false }
