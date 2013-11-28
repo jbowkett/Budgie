@@ -13,5 +13,6 @@ class Transaction
   property :transaction_date,  DateTime,   :required => true
   property :narrative,         String,     :required => false
   property :category_override, String,     :required => false
+  property :month_sk,          Integer,    :required => true, :default => lambda { |r,p| (r.transaction_date.year * 12) + (r.transaction_date.month - 1) }
 
 end
