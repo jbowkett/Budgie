@@ -120,8 +120,7 @@ class TransactionExtractor
 
       balance_raw = row_cells[4].text
 
-      balance = to_pence(balance_raw.gsub('-',''))
-      balance = negate(balance) if balance_raw =~ /.*-.*/
+      balance = to_pence(balance_raw)
 
       amount = is_present?(debit) ? debit : credit
       amount_in_pence = to_pence(amount)

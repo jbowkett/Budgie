@@ -9,6 +9,7 @@ module Extraction
   end
 
   def to_pence(raw_amount)
-    Integer(Float(raw_amount.gsub(/£|\+/, '')) * 100.00)
+    amount = Integer(Float(raw_amount.gsub(/£|\+|-/, '')) * 100.00)
+    raw_amount =~ /.*-.*/ ? negate(amount) : amount
   end
 end
