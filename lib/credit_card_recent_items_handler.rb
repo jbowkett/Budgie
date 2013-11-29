@@ -1,5 +1,5 @@
 require_relative '../common/transaction'
-require 'recent_items_handler'
+require_relative 'recent_items_handler'
 class CreditCardRecentItemsHandler
 
   attr_reader :recent_items_handler
