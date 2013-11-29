@@ -1,6 +1,7 @@
 require_relative '../common/transaction'
 require 'delegate'
 require 'date'
+require_relative 'extraction'
 
 class TransactionExtractor
 
@@ -68,21 +69,9 @@ class TransactionExtractor
     entry.debit.nil? || entry.debit.empty?
   end
 
-  class Extractor
-    def is_present?(value)
-      !String(value).empty?
-    end
 
-    def negate(amount)
-      amount * -1
-    end
-    def to_pence(raw_amount)
-      Integer(Float(raw_amount.gsub(/£|\+/, '')) * 100.00)
-    end
-
-  end
-
-  class RecentItemsCurrentAccountExtractor  < Extractor
+  class RecentItemsCurrentAccountExtractor
+    include Extraction
     def extract_statement_entry(timestamp, row_cells, balance_after_transaction, account)
       narrative = row_cells[1].text
       credit = row_cells[2].text
@@ -103,7 +92,8 @@ class TransactionExtractor
 
   end
 
-  class CreditCardExtractor  < Extractor
+  class CreditCardExtractor
+    include Extraction
     def extract_statement_entry(timestamp, row_cells, balance_after_transaction, account)
       narrative = row_cells[1].text
       amount_raw = row_cells[2].text
@@ -119,7 +109,8 @@ class TransactionExtractor
       nil # ignore balance lines
     end
   end
-  class OlderStatementCurrentAccountExtractor < Extractor
+  class OlderStatementCurrentAccountExtractor
+    include Extraction
     def extract_statement_entry(timestamp, row_cells, balance_after_transaction, account)
       narrative = row_cells[1].text
       credit = row_cells[2].text
