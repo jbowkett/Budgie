@@ -19,7 +19,20 @@ describe '#extract_transactions' do
 
     it 'extracts the transactions' do
       previous_txns = CreditCardPreviousStatementsHandler.new(TransactionExtractor.new(account)).extract_transactions(@session)
-      previous_txns.size.should == 21
+      previous_txns.size.should == 8
     end
+
+    it 'negates the amounts on the transactions' do
+      previous_txns = CreditCardPreviousStatementsHandler.new(TransactionExtractor.new(account)).extract_transactions(@session)
+      previous_txns.last.amount_in_pence.should == -18987
+      previous_txns.first.amount_in_pence.should == -208
+      previous_txns[1].amount_in_pence.should == 2000
+    end
+
+    it 'extracts the balance' do
+      balance = CreditCardPreviousStatementsHandler.new(TransactionExtractor.new(account)).extract_balance(@session)
+      balance.should == -65421
+    end
+
   end
 end
