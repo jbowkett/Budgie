@@ -11,6 +11,9 @@ require_relative 'recent_items_handler'
 require_relative 'transaction_extractor'
 require_relative 'statement_history_handler'
 require_relative 'previous_statements_handler'
+require_relative 'credit_card_recent_items_handler'
+require_relative 'credit_card_statement_history_handler'
+require_relative 'credit_card_previous_statements_handler'
 
 def usage
   'Main <memorable date> <memorable name> <first school> <last school> <birth place> <security code> <account no> [sortcode]'
@@ -42,9 +45,16 @@ login_step_one = LoginStepOneHandler.new(account)
 login_step_two = LoginStepTwoHandler.new(login)
 login_step_three = LoginStepThreeHandler.new(login)
 balance = BalanceHandler.new(account)
-recent_items = RecentItemsHandler.new(TransactionExtractor.new(account))
-statement_history = StatementHistoryHandler.new
-previous_statements = PreviousStatementsHandler.new(TransactionExtractor.new(account))
+if account.is_credit_card?
+  recent_items = CreditCardRecentItemsHandler.new(RecentItemsHandler.new(TransactionExtractor.new(account)))
+  statement_history = CreditCardStatementHistoryHandler.new
+  previous_statements = CreditCardPreviousStatementsHandler.new(TransactionExtractor.new(account))
+else
+  recent_items = RecentItemsHandler.new(TransactionExtractor.new(account))
+  statement_history = StatementHistoryHandler.new
+  previous_statements = PreviousStatementsHandler.new(TransactionExtractor.new(account))
+end
+
 
 smile_extractor = SmileNavigator.new(account, login_step_one, login_step_two, login_step_three, balance, recent_items, statement_history, previous_statements)
 max_transaction_date = storage.max_transaction_date(account)
