@@ -16,6 +16,7 @@ class PreviousStatementsHandler
       page.click_link 'previous statement page'
       sleep(2)
     end
+    prev_txns += extract_transactions(page)
     prev_txns.reject{|txn| txn.transaction_date <= max_transaction_date }
   end
 
