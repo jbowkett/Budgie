@@ -1,0 +1,545 @@
+/*	Module:	smile Stylesheet
+ 	
+	Module Info
+	-----------
+	DEFAULT FONT SIZES - abolute/scalable values
+	--------------------------------------------
+	xx-small	-	8pt
+	 x-small	-	10pt
+	   small	-	12pt
+	  medium	-	14pt
+	   large	-	16pt
+	 x-large	-	18pt
+	xx-large	-	20pt
+
+	Modifications
+	---------------------------------------------
+	Developer	Date		Description
+	SMahmood	24/09/2002	Initial
+    Russ Cairns June 2003 
+*/
+
+/* MAIN BODY TAG */
+/* PAGE BODY */
+BODY {
+	background-color: #ffffff;
+	color: black;
+	font-family: arial, verdana, geneva, helvetica;
+	border-color: black;
+	font-size: x-small;
+	margin-top: 0pt;
+	margin-right: 0pt;
+	margin-left: 0pt;
+	margin-bottom: 0pt;	
+}
+
+/***** TABLES ****
+
+   Listed in TABLE, TH and TD groups
+   intended to be used together.
+
+ *****************/
+
+/* Default Table Settings */
+TR {
+	font-size: x-small;
+	font-family: arial, verdana, geneva, helvetica;	
+	font-colour: #000000;
+	text-align: center;
+}
+
+TD {
+	font-size: x-small;
+	font-family: arial, verdana, geneva, helvetica;
+	font-color: #000000;
+	vertical-align: middle;
+}
+
+/* .summary* styles used for summary pages (standing order,
+   direct debits etc.)
+*/
+
+TABLE.summaryTable {
+	frame: border;
+    border-width: 1pt; 
+    border-color: #FBFBFB;
+    border-style: outset;
+}
+
+TH.summaryHeader{
+	background-color: #FF3399;
+	color: #FFFFFF;
+	border-width: 1pt;;
+	border-top-color: #CBCBCB;
+    border-top-style: ridge;
+	border-left-color: #CBCBCB;
+    border-left-style: ridge;
+	border-bottom-color: #C9C9C9;
+    border-bottom-style: solid;
+	border-right-color: #C9C9C9;
+    border-right-style: solid;
+	font-size: x-small;
+	font-weight: normal;
+	font-family: arial, verdana, geneva, helvetica;
+	padding-left: 5pt;
+	padding-right: 5pt;
+	text-align: center;
+}
+
+TH.summaryHeaderBold{
+	background-color: #FF3399;
+	color: #FFFFFF;
+	border-width: 1pt;;
+	border-top-color: #CBCBCB;
+    border-top-style: ridge;
+	border-left-color: #CBCBCB;
+    border-left-style: ridge;
+	border-bottom-color: #C9C9C9;
+    border-bottom-style: solid;
+	border-right-color: #C9C9C9;
+    border-right-style: solid;
+	font-size: x-small;
+	font-weight: bold;
+	font-family: arial, verdana, geneva, helvetica;
+	padding-left: 5pt;
+	padding-right: 5pt;
+	text-align: center;
+}
+
+TH.summaryHeaderBoldLeft{
+	background-color: #FF3399;
+	color: #FFFFFF;
+	border-width: 1pt;;
+	border-top-color: #CBCBCB;
+    border-top-style: ridge;
+	border-left-color: #CBCBCB;
+    border-left-style: ridge;
+	border-bottom-color: #C9C9C9;
+    border-bottom-style: solid;
+	border-right-color: #C9C9C9;
+    border-right-style: solid;
+	font-size: x-small;
+	font-weight: bold;
+	font-family: arial, verdana, geneva, helvetica;
+	text-align: left;
+}
+
+TD.summaryDetailL{
+	background-color: #FFFFFF;
+	color: #000000;
+	border-width: 1pt;;
+	border-top-color: #CBCBCB;
+    border-top-style: ridge;
+	border-left-color: #CBCBCB;
+    border-left-style: ridge;
+	border-bottom-color: #C9C9C9;
+    border-bottom-style: solid;
+	border-right-color: #C9C9C9;
+    border-right-style: solid;
+	font-size: x-small;
+	font-family: arial, verdana, geneva, helvetica;
+	text-align: left;
+}
+
+TD.summaryDetailR{
+	background-color: #FFFFFF;
+	color: #000000;
+	border-width: 1pt;;
+	border-top-color: #CBCBCB;
+    border-top-style: ridge;
+	border-left-color: #CBCBCB;
+    border-left-style: ridge;
+	border-bottom-color: #C9C9C9;
+    border-bottom-style: solid;
+	border-right-color: #C9C9C9;
+    border-right-style: solid;
+	font-size: x-small;
+	font-family: arial, verdana, geneva, helvetica;
+	text-align: right;
+}
+
+TD.summaryDetailC{
+	background-color: #FFFFFF;
+	color: #000000;
+	border-width: 1pt;;
+	border-top-color: #CBCBCB;
+    border-top-style: ridge;
+	border-left-color: #CBCBCB;
+    border-left-style: ridge;
+	border-bottom-color: #C9C9C9;
+    border-bottom-style: solid;
+	border-right-color: #C9C9C9;
+    border-right-style: solid;
+	font-size: x-small;
+	font-family: arial, verdana, geneva, helvetica;
+	text-align: center;
+}
+
+/* .print* styles used for print pages (standing order,
+   direct debits etc.)
+   Listed in TABLE, TH and TD groups
+   intended to be used together.
+*/
+
+TABLE.printTable {
+	frame: border;
+    border-top-width: 1.5pt; 
+    border-bottom-width: 1.5pt; 
+    border-left-width: 1.5pt; 
+    border-right-width: 1.5pt; 
+	border-top-color: #CBCBCB;
+    border-top-style: solid;
+	border-left-color: #CBCBCB;
+    border-left-style: solid;
+	border-bottom-color: #909090;
+    border-bottom-style: solid;
+	border-right-color: #909090;
+    border-right-style: solid;
+}
+
+TH.printHeaderC{
+	background-color: #000000;
+	color: #FFFFFF;
+	border-width: 1pt;;
+	border-style: solid;
+	border-color: #C0C0C0;
+	font-size: x-small;
+	font-weight: normal;
+	text-align: center;
+	font-family: arial, verdana, geneva, helvetica;
+}
+
+TH.printHeaderR{
+	background-color: #000000;
+	color: #FFFFFF;
+	border-width: 1pt;;
+	border-style: solid;
+	border-color: #C0C0C0;
+	font-size: x-small;
+	font-weight: normal;
+	text-align: right;
+	padding-right: 0;
+	font-family: arial, verdana, geneva, helvetica;
+}
+
+TH.printHeaderL{
+	background-color: #000000;
+	color: #FFFFFF;
+	border-width: 1pt;;
+	border-style: solid;
+	border-color: #C0C0C0;
+	font-size: x-small;
+	font-weight: normal;
+	text-align: left;
+	padding-left: 0;
+	font-family: arial, verdana, geneva, helvetica;
+}
+
+/* miscellaneous table tags */
+
+TD.dataRowL {
+	text-align: left;
+	padding-left: 0pt;
+}
+
+TD.dataRowLX {
+	text-align: left;
+	padding-left: 0pt;
+    font-size: xx-small;
+}
+
+TD.dataRowLPadded {
+	text-align: left;
+	padding-left: 5pt;
+}
+
+TD.dataRowLB {
+	text-align: left;
+	padding-left: 0pt;
+	font-weight: bold;
+}
+
+TD.dataRowR {
+	text-align: right;
+	padding-right:0pt;
+}
+
+TD.dataRowLarge {
+    text-align: left;
+	padding-left: 0pt;
+	font-size: x-small;
+}
+
+TD.dataRow {
+	text-align: centre;
+}
+
+/* Error Message Displayed <TD>*/
+TD.error {
+	text-align: left;
+	font-size: x-small;
+	color: #ff0000 ;
+
+}
+
+/* Error Message Displayed, right aligned <TD>*/
+TD.errorR {
+	text-align: right;
+	font-size: x-small;
+	padding-right: 10px;
+	color: #ff0000;
+}
+
+/* PAGE HEADER MENU OPTIONS */
+/* Used in Co-opHeaders <TD>*/
+TD.pageheader {
+	background-color: #FF3399;	
+	font-size: x-small;
+	font-style: normal;
+	font-weight: bold;
+	font-family: arial, verdana, geneva, helvetica;
+	cellpadding: 0;
+	cellspacing: 0;
+}
+
+.pageheader {
+	background-color: #FF3399;	
+	font-size: x-small;
+	font-style: normal;
+	font-weight: bold;
+	font-family: arial, verdana, geneva, helvetica;
+}
+
+/* Placement tag */
+TD.label {
+	text-align: right;
+	border-color:FFFFFF;
+}
+
+/* Used for form fields - maily for placement*/
+TD.field {
+	text-align: left;
+}
+/* Used to align text and images bottom or top*/
+TD.verttop {
+	vertical-align: top;
+	padding-top: 0pt;
+	padding-bottom: 0pt;
+}
+
+TD.vertbottom {
+	vertical-align: bottom;
+	text-align: center;
+	padding-top: 0pt;
+	padding-bottom: 0pt;
+}
+/*STANDALONE*/
+/* Places a carriage return after heading */
+/* Largest Page Headings 18pt*/
+H1 {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: large;
+	font-style: normal;
+	color: #0099CC;
+	background-color: #FFFFFF;
+	font-weight: normal;	
+}
+/* Large Page Headings 16pt*/
+H2 {
+	font-family: arial, verdana, geneva, helvetica;
+	font-size: large;
+	font-style: normal;
+	font-color: #000000;
+	line-height: normal;
+}
+
+/* Large Page Headings 12pt*/
+H3 {
+	font-family: arial, verdana, geneva, helvetica;
+	font-size: 	 small;
+	font-style:  normal;
+	font-color:  #000000;
+	line-height: normal;
+}
+
+/* No carriage return after heading */
+SPAN.H1{
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: large;
+	font-style: normal;
+	color: #0099CC;
+	background-color: #FFFFFF;
+	font-weight: normal;
+}
+/* Large Page Headings 12pt*/
+SPAN.H3 {
+	font-family: arial, verdana, geneva, helvetica;
+	font-size: 	 small;
+	font-style:  normal;
+	font-color:  #000000;
+	line-height: normal;
+}
+/* No carriage return after heading */
+SPAN.H2{
+	font-family: arial, verdana, geneva, helvetica;
+	font-size: large;
+	font-style: normal;
+	color: #000000;
+	font-weight: normal;
+	line-height: normal;
+}
+SPAN.H4{
+	font-family: arial, verdana, geneva, helvetica;
+	font-size: small;
+	font-style: normal;
+	font-color: #000000;
+	font-weight: bold;
+	line-height: normal;
+	
+}
+
+SPAN.smilehighlight {
+	font-family: arial, verdana, geneva, helvetica;
+	font-size: x-small;
+	color : #FF0000;
+	font-weight: normal;
+}
+
+/* User Information Text */
+P.userInfo {
+	font-family: arial, verdana, geneva, helvetica;
+	font-size: xx-small;
+	font-style: normal;
+	color: #999999;
+	font-weight: normal;
+	line-height: normal;
+	background-color: #FFFFFF;
+	text-align : left;
+}
+TD.userInfo {
+	font-family: arial, verdana, geneva, helvetica;
+	font-size: xx-small;
+	font-style: normal;
+	color: #999999;
+	font-weight: normal;
+	line-height: normal;
+	background-color: #FFFFFF;
+	text-align : left;
+}
+
+/* Standard Links */
+A{
+	text-decoration: none;
+    color: #000000;
+}
+
+A:link IMG{
+    BORDER-TOP-STYLE:none;
+    BORDER-RIGHT-STYLE:none;
+    BORDER-LEFT-STYLE:none;
+    BORDER-BOTTOM-STYLE:none;
+}
+
+A:visited IMG{
+    BORDER-TOP-STYLE:none;
+    BORDER-RIGHT-STYLE:none;
+    BORDER-LEFT-STYLE:none;
+    BORDER-BOTTOM-STYLE:none;
+}
+
+/*Enrolment tag */
+SELECT.wide {
+    width: 120pt;
+}
+
+SELECT.wide2 {
+    width: 100pt;
+}
+
+/*pink text color */
+.pinkText{
+	color: #ff3399;
+}
+SPAN.pink {
+    color: #FF3399;
+}
+
+/*Descriptive Link text minus a line break*/
+SPAN.bodyhighlight {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: x-small;
+	color : #ff3399;
+	font-weight: bold;
+}
+.pinktextbold{
+	color: #ff3399;
+	font-weight: bold;
+}
+
+.pinktextLarge{
+    color: #ff95ca;
+	font-weight: bold;
+	font-size: medium;
+
+}
+
+PRE {
+	font-size: x-small;
+	font-family: arial, verdana, geneva, helvetica;	
+}
+
+fieldset {
+	border: none;
+	padding: 0pt;
+	margin: 0pt;
+}
+
+legend {
+	display: none;
+	visibility: hidden;
+}
+
+SPAN.nodisplay {
+	display: none;
+	visibility: hidden;
+	font-size: 0pt;
+}
+SPAN.boldCourier {
+	font-family: courier;
+	font-weight: bold;
+}
+SPAN.boldRed {
+	font-weight: bold;
+	color : #FF0000;
+}
+SPAN.normalCourier {
+	font-family: courier;
+	font-weight: normal;	
+}
+/*for fields like challenge code*/
+SPAN.highlightCode{
+	font-weight: bold;
+	background-color: #FFC652
+}
+
+TD.highlightCol{
+	background-color: #FF3399;
+    text-align: left;
+}
+
+.backgroundColour2FATable {
+	background-color: #ffeff7
+}
+/*PARAGRAPHS */
+
+/* SmallPrint */
+P.smallprint {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: xx-small;
+	font-style: normal;
+	font-variant: normal;
+}
+
+.twoFAErrorFont {
+	color: #990000;
+}
