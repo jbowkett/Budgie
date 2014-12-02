@@ -21,7 +21,7 @@ class TransactionExtractor
     table = decorate_with_timestamps(table)
 
     current_balance_in_pence = closing_balance_in_pence
-    table.map do |row|
+    table.compact.map do |row|
       row_cells = row.all('td')
 
       extractor = EXTRACTORS.fetch(row_cells.length)
@@ -36,6 +36,7 @@ class TransactionExtractor
     prev_date = ''
     table.map do |row|
       row_cells = row.all('td')
+      next if row_cells.size == 1
       raw_date = row_cells[0].text
       if prev_date == raw_date
         time_counter -= 1
