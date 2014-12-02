@@ -9,6 +9,9 @@ class BalanceHandler
   end
 
   def extract_balance(page)
+    if page.title == 'smile noticeboard'
+      page.click_button 'ok'
+    end
     balance_row = find_balance_row_in(page)
     balance_from(balance_row)
   end
